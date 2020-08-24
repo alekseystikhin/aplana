@@ -5,7 +5,6 @@ public class ReadDataAndRewrite {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int numberOfStringsFromFile = 0;
-        int numberOfStringsFromInput = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(new File("resources\\test3.txt")))) {
             String s;
             while ((s = br.readLine()) != null) {
@@ -20,22 +19,18 @@ public class ReadDataAndRewrite {
 
         String str = "";
         String temp;
-        System.out.println("Признак конца ввода - строка \"stop\"");
-        do {
+
+        while (numberOfStringsFromFile > 0) {
             temp = scanner.nextLine();
-            if ("stop".compareTo(temp) == 0) break;
             str += temp + "\r\n";
-            ++numberOfStringsFromInput;
+            --numberOfStringsFromFile;
+        }
 
-        } while ("stop".compareTo(temp) != 0);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File("resources\\test3.txt")))) {
+            bw.write(str);
+        } catch (IOException ex) {
 
-        if (numberOfStringsFromFile == numberOfStringsFromInput) {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File("resources\\test3.txt")))) {
-                bw.write(str);
-            } catch (IOException ex) {
-
-                System.out.println(ex.getMessage());
-            }
+            System.out.println(ex.getMessage());
         }
     }
 }
